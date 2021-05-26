@@ -14,8 +14,8 @@ extension Color {
 
 struct CircleButtonStyleView: ButtonStyle {
     
-    @State var width: CGFloat = 50
-    @State var height: CGFloat = 50
+    @State var width: CGFloat = 30
+    @State var height: CGFloat = 30
     
     
     func makeBody(configuration: Self.Configuration) -> some View {

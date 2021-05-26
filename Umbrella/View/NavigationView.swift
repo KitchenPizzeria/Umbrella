@@ -4,35 +4,18 @@
 //
 //  Created by Joseph Meyrick on 22/05/2021.
 //
+//TODO - create neumorphic view for 7 day HStack
+//     - Add an error label to display basic error message
+//     - create day snapshot view
+// google internship / courses
 
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State private var isShowing = false
-    
     var body: some View {
-        NavigationView {
             
-            ZStack {
-                if isShowing {
-                    SideMenuView(isShowing: $isShowing)
-                }
-                HomeView()
-                    //.cornerRadius(isShowing ? 20 : 10)
-                    .offset(x: isShowing ? 300 : 0, y: isShowing ? 44 : 0)
-                    .scaleEffect(isShowing ? 0.8 : 1)
-                    .navigationBarItems(leading: Button(action: {
-                        withAnimation(.spring()) {
-                            isShowing.toggle()
-                        }
-                    }, label: {
-                        Image(systemName: "list.bullet")
-                            .foregroundColor(.black)
-                    }))
-                    .navigationTitle("Home")
-            }
-        }
+        HomeView()
+       
     }
 }
 

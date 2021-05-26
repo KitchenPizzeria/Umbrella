@@ -5,38 +5,26 @@
 //  Created by Joseph Meyrick on 20/05/2021.
 //
 
-import UIKit
+
 import CoreLocation
 import Alamofire
 import SwiftyJSON
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate {
+class HomeViewController: UIViewController, CLLocationManagerDelegate {
     
-    @IBOutlet weak var faren: UISwitch!
-    
-    let WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
+    let CURRENT_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
+    let SIXTEENDAY_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
+    let FOUR_DAY_HOURLY_URL = "https://pro.openweathermap.org/data/2.5/forecast/hourly"
     let APP_ID = "3c904a90e1b32e94a22ffdb510958557"
-    
-    @IBAction func `switch`(_ sender: UISwitch) {
-        
-        if sender.isOn {
-            
-        }
-    }
-    
     let locationManager = CLLocationManager()
     let weatherDataModel = WeatherDataModel()
- 
-    @IBOutlet weak var weatherIcon: UIImageView!
-    @IBOutlet weak var cityLabel: UILabel!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var button: UIButton!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getWeatherData()
+        print("HERE")
+        
+        getWeatherData(url: SIXTEENDAY_WEATHER_URL, parameters: ["q":"london","APP_ID":APP_ID])
     
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
@@ -44,26 +32,30 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
         
     }
+    
+    func getImageFromData() -> String {
+        return "fog"
+   
+    }
 
     //MARK: - Networking
     
-    func getWeatherData(url: String = "", parameters: [String: String] = ["":""]) {
+    func getWeatherData(url: String, parameters: [String: String]) {
         
-        AF.request(WEATHER_URL, method: .get, parameters: ["q":"London","appid": APP_ID]).response { response in
         
+        AF.request(CURRENT_WEATHER_URL, method: .get, parameters: parameters).response { response in
         
             let returnedValue = response.data
             let weatherJSON: JSON = JSON(returnedValue)
             print("\n\n\n\(weatherJSON)\n\n\n")
             
-            self.updateWeatherData(json: weatherJSON)
+            //self.updateWeatherData(json: weatherJSON)
             
            }
-
-        }
+        
+    }
     
     //MARK: - JSON Parsing
-    /***************************************************************/
 
     func updateWeatherData(json : JSON) {
     
@@ -77,23 +69,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
 
         weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
 
-        updateUIWithWeatherData()
+        //updateUIWithWeatherData()
         
         }
 
-    //MARK: - UI Updates
-    /***************************************************************/
-    
-    func updateUIWithWeatherData() {
-        
-//        cityLabel.text = weatherDataModel.city
-//        temperatureLabel.text = "\(weatherDataModel.temperature)°"
-//        weatherIcon.image = UIImage(named: weatherDataModel.weatherIconName)
-        
-        //TODO: write code to update UI to show all 7 days of week and buttons and display today weath
-        
-    }
-  
+
     //MARK: - Location Manager Delegate Methods
     /***************************************************************/
 
@@ -110,13 +90,14 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             
             let params : [String : String] = ["lat" : latitude, "lon" : longitude, "appid" : APP_ID]
             
-            //getWeatherData(url: WEATHER_URL, parameters: params)
+            getWeatherData(url: CURRENT_WEATHER_URL, parameters: params)
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
-        cityLabel.text = "Location Unavailable"
+        //Display label underneath with location unavailble
+        //cityLabel.text = "Location Unavailable"
     }
     
     
@@ -128,7 +109,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     func userEnteredANewCityName(city: String) {
         
         let params : [String : String] = ["q" : city, "appid" : APP_ID]
-        //getWeatherData(url: WEATHER_URL, parameters: params)
+        getWeatherData(url: CURRENT_WEATHER_URL, parameters: params)
         
     }
     
