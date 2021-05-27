@@ -12,6 +12,8 @@ struct WeatherIconViewStack: View {
     let daysOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     let controller = HomeViewController()
     
+    @Binding var showMenu : Bool
+    
     var body: some View {
         
         HStack {
@@ -31,7 +33,11 @@ struct WeatherIconViewStack: View {
                         .cornerRadius(10)
                   
                     
-                    Button(action: {}, label: {
+                    Button(action: {
+                        withAnimation(.spring()){
+                            showMenu.toggle()
+                        }
+                    }, label: {
                     
                         Image(systemName: "chevron.down")
                             .padding(.bottom, 10)
@@ -145,6 +151,6 @@ struct WeatherIconViewStack: View {
 
 struct WeatherIconViewCell_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherIconViewStack()
+        WeatherIconViewStack(showMenu: .constant(true))
     }
 }

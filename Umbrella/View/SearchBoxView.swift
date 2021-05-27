@@ -6,16 +6,16 @@
 //
 
 import SwiftUI
+import CoreLocation
 
-
+func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
+    CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
+}
 
 struct SearchBoxView: View {
     
- 
-    let CURRENT_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
-    let SIXTEENDAY_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
-    let FOUR_DAY_HOURLY_URL = "https://pro.openweathermap.org/data/2.5/forecast/hourly"
-    let APP_ID = "3c904a90e1b32e94a22ffdb510958557"
+    let ONE_CALL_URL = "https://api.openweathermap.org/data/2.5/onecall"
+    let APP_ID = "f880910fee6908ccc2f2a676e203e5b6"
     
     let controller = HomeViewController()
     
@@ -30,12 +30,31 @@ struct SearchBoxView: View {
             
             HStack (alignment: .center) {
                 
-                Button(action: {    
-                    controller.getWeatherData(url: FOUR_DAY_HOURLY_URL,
-                                              parameters:
-                                                ["q":userInput,"appid": APP_ID,"cnt": "3","units":"metric"]
-                    )
-                }) {
+                Button(action: {
+                    
+                    getCoordinateFrom(address: "London") { coordinate, error in
+                        
+                      if error != nil {
+                        
+                        print("error retrieving coordinates")
+                        
+                      } else {
+                        
+                        let lat = coordinate!.latitude
+                        let lon = coordinate!.longitude
+                        
+                        controller.getWeatherData(url: ONE_CALL_URL,
+                                                  parameters: ["lat":"51.507351",
+                                                               "lon":"-0.127758",
+                                                               "appid": APP_ID])
+                      }
+                    }
+                    
+//                    controller.getWeatherData(url: FOUR_DAY_HOURLY_URL,
+//                                              parameters: ["q":"London",
+//                                                           "appid": APP_ID,
+//                                                           "cnt":"96"])
+                }){
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
                 }

@@ -33,6 +33,9 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
         
     }
     
+
+    
+    
     func getImageFromData() -> String {
         return "fog"
    
@@ -42,11 +45,11 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
     
     func getWeatherData(url: String, parameters: [String: String]) {
         
-        
-        AF.request(CURRENT_WEATHER_URL, method: .get, parameters: parameters).response { response in
+        AF.request(url, method: .get, parameters: parameters).response { response in
         
             let returnedValue = response.data
-            let weatherJSON: JSON = JSON(returnedValue)
+            let weatherJSON: JSON = JSON(returnedValue as Any)
+            
             print("\n\n\n\(weatherJSON)\n\n\n")
             
             //self.updateWeatherData(json: weatherJSON)
