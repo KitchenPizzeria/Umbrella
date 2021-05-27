@@ -8,31 +8,32 @@
 import SwiftUI
 import CoreLocation
 
-func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
-    CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
-}
+var lat: Double = 0.00
+var lon: Double = 0.00
 
 struct SearchBoxView: View {
-    
-    let ONE_CALL_URL = "https://api.openweathermap.org/data/2.5/onecall"
-    let APP_ID = "f880910fee6908ccc2f2a676e203e5b6"
     
     let controller = HomeViewController()
     
     @State var userInput: String = ""
+    @Binding var cityHasBeenSelected: Bool
+    @Binding var hideMapView: Bool
+    
+    
     
     var body: some View {
         
-        VStack {
+        VStack (spacing: 5) {
         
             Text("Search for your city's weather")
                 .font(.custom("noteworthy",size: 15))
+                .padding(.top, 5)
             
             HStack (alignment: .center) {
                 
                 Button(action: {
                     
-                    getCoordinateFrom(address: "London") { coordinate, error in
+                    getCoordinateFrom(address: userInput) { coordinate, error in
                         
                       if error != nil {
                         
@@ -40,25 +41,37 @@ struct SearchBoxView: View {
                         
                       } else {
                         
-                        let lat = coordinate!.latitude
-                        let lon = coordinate!.longitude
                         
-                        controller.getWeatherData(url: ONE_CALL_URL,
-                                                  parameters: ["lat":"51.507351",
-                                                               "lon":"-0.127758",
-                                                               "appid": APP_ID])
+                        
+                        lat = coordinate!.latitude
+                        lon = coordinate!.longitude
+                        
+                        controller.getWeatherData(lat: lat, lon: lon)
+                        
+                        
+                        withAnimation(.spring()) {
+                       
+                            cityHasBeenSelected.toggle()
+      
+                        }
+                        
+                        
                       }
                     }
                     
-//                    controller.getWeatherData(url: FOUR_DAY_HOURLY_URL,
-//                                              parameters: ["q":"London",
-//                                                           "appid": APP_ID,
-//                                                           "cnt":"96"])
                 }){
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                    
+                    if cityHasBeenSelected {
+                        Image(systemName: "arrow.uturn.left")
+                            .foregroundColor(.gray)
+                    } else {
+                    
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                    }
+                    
                 }
-                .padding(.leading, 3)
+                .padding(.leading, 10)
                 .buttonStyle(CircleButtonStyleView())
                 
                 
@@ -66,21 +79,30 @@ struct SearchBoxView: View {
                 TextField("Search...",text: $userInput)
                     .padding(.leading, 5)
                 
+                
                 Button(action: {
-     
+                    
+                    withAnimation(.spring()){
+                        
+                        hideMapView.toggle()
+                        
+                    }
+                     
                 }) {
                     Image(systemName: "mappin.and.ellipse")
                         .foregroundColor(.gray)
                 }
-                .padding(.trailing, 5)
+                .padding(.trailing, 10)
                 .buttonStyle(CircleButtonStyleView())
             
             }
             
-            .frame(width: 300, height: 35, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            
+            .frame(width: 300, height: 35)
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 30, style: .continuous)
+
                         .shadow(color: .white, radius: 15, x: -10, y: -10)
                         .shadow(color: .black, radius: 15, x: 10, y: 10)
                         .blendMode(.overlay)
@@ -89,19 +111,50 @@ struct SearchBoxView: View {
                         
                         .fill(
                             Color.init(red: 255, green: 178, blue: 255, opacity: 1)
-                        )
+                    )
+                        
+                        
                         
                 }
+        
             )
-            
+            .padding([.horizontal,.bottom])
             .foregroundColor(.primary)
+            
+            
+            
+            if cityHasBeenSelected {
+                Text("City Selected: \(userInput)")
+                    .font(.custom("noteworthy",size: 15))
+                Text("Latitude: \(lat, specifier: "%.2f") | Longitude: \(lon, specifier: "%.2f")")
+                    .font(.custom("noteworthy",size: 15))
+                    .padding(.bottom, 10)
+            }
+            
+            
+
         }
+        .background(
+            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                .foregroundColor(.offWhite.opacity(0.5))
+                .border(Color.gray.opacity(0.5),width: 5)
+                .cornerRadius(30)
+              
+
+        )
+    
     }
+    
+    func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
+        CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
+    }
+    
+
 }
 
 struct SearchBoxView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBoxView()
+        SearchBoxView(cityHasBeenSelected: .constant(true), hideMapView: .constant(true))
     }
 }
 

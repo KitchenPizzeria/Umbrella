@@ -11,10 +11,12 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State var userCityInput = ""
-    @State var isErrorHidden = true
+    @State private var userCityInput = ""
     @State private var showWeatherInfoPanel = false
-    
+    @State private var cityHasBeenSelected = false
+    @State private var hideMapView = true
+
+
     let controller = HomeViewController()
     
     let viewWidth = UIScreen.main.bounds.width
@@ -22,47 +24,27 @@ struct HomeView: View {
 
     var body: some View {
     
-        VStack {
+    
+        ZStack {
             
-            SearchBoxView(userInput: "")
-                .padding(.top,70)
+            MapView()
+                
+            SearchBoxView(userInput: "",cityHasBeenSelected: $cityHasBeenSelected,hideMapView: $hideMapView)
             
-            Spacer()
+                .padding(.bottom, 680)
             
-            WeatherIconViewStack(showMenu: $showWeatherInfoPanel)
-                
-            ZStack{
-                
-                NoneSelectedPanel()
-                
-                if showWeatherInfoPanel {
-                    
-                    NoneSelectedPanel()
-                        .offset(y:500)
-                    
-                    WeatherInfoPanel()
-                        .offset(y: showWeatherInfoPanel ? -450: 0)
-                    
-                    
-                    
+            
+            
+            InformationPane(userCityInput:.constant(""), showWeatherInfoPanel: .constant(true), cityHasBeenSelected: .constant(true), hideMapView: .constant(true))
+                .offset(y: hideMapView ? 0:650)
+            
+            
 
-                }
-            }
-            
-                
-            
         }
-        .frame(width: viewWidth, height: viewHeight, alignment: .center)
-        
-        .background(
-            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.white]), startPoint: .top, endPoint: .bottom)
-                .opacity(0.3)
-                .ignoresSafeArea()
-        )
-        
-        
     }
 }
+    
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

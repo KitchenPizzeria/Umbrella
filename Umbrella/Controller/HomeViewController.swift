@@ -12,20 +12,14 @@ import SwiftyJSON
 
 class HomeViewController: UIViewController, CLLocationManagerDelegate {
     
-    let CURRENT_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
-    let SIXTEENDAY_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
-    let FOUR_DAY_HOURLY_URL = "https://pro.openweathermap.org/data/2.5/forecast/hourly"
-    let APP_ID = "3c904a90e1b32e94a22ffdb510958557"
+    let ONE_CALL_URL = "https://api.openweathermap.org/data/2.5/onecall"
+    let APP_ID = "f880910fee6908ccc2f2a676e203e5b6"
     let locationManager = CLLocationManager()
     let weatherDataModel = WeatherDataModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("HERE")
-        
-        getWeatherData(url: SIXTEENDAY_WEATHER_URL, parameters: ["q":"london","APP_ID":APP_ID])
-    
+      
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.requestWhenInUseAuthorization()
@@ -43,14 +37,21 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
 
     //MARK: - Networking
     
-    func getWeatherData(url: String, parameters: [String: String]) {
+    func getWeatherData(lat: Double, lon: Double) {
+        
+        let parameters = ["lat":"\(lat)",
+                      "lon":"\(lon)",
+                      "exclude":"minutely,hourly,current,alerts",
+                      "appid": APP_ID]
+        
+        let url = ONE_CALL_URL
         
         AF.request(url, method: .get, parameters: parameters).response { response in
         
             let returnedValue = response.data
             let weatherJSON: JSON = JSON(returnedValue as Any)
             
-            print("\n\n\n\(weatherJSON)\n\n\n")
+            print("\n\n\n\(weatherJSON["daily"][0])\n\n\n")
             
             //self.updateWeatherData(json: weatherJSON)
             
@@ -88,12 +89,10 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
             
             print("longitude = \(location.coordinate.longitude), latitude = \(location.coordinate.latitude)")
             
-            let latitude = String(location.coordinate.latitude)
-            let longitude = String(location.coordinate.longitude)
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
             
-            let params : [String : String] = ["lat" : latitude, "lon" : longitude, "appid" : APP_ID]
-            
-            getWeatherData(url: CURRENT_WEATHER_URL, parameters: params)
+            getWeatherData(lat: latitude, lon: longitude)
         }
     }
     
@@ -102,24 +101,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
         //Display label underneath with location unavailble
         //cityLabel.text = "Location Unavailable"
     }
-    
-    
-
-    
-    //MARK: - Change City Delegate methods
-    /***************************************************************/
-    
-    func userEnteredANewCityName(city: String) {
-        
-        let params : [String : String] = ["q" : city, "appid" : APP_ID]
-        getWeatherData(url: CURRENT_WEATHER_URL, parameters: params)
-        
-    }
-    
-    
-
-    
-    
+ 
 }
 
 

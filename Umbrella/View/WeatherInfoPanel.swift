@@ -10,13 +10,15 @@ import SwiftUI
 let viewWidth = UIScreen.main.bounds.width
 let viewHeight = UIScreen.main.bounds.height
 
+// MARK:- NON SELECTED PANEL
+
 struct NoneSelectedPanel: View {
-    
-    
+
+
     var body: some View {
-        
-        RoundedRectangle(cornerRadius: 30, style: .continuous)
-            .foregroundColor(.clear)
+
+        RoundedRectangle(cornerRadius: 20, style: .continuous)
+            .foregroundColor(.offWhite)
             .border(Color.gray,width: 5)
             .opacity(0.5)
             .cornerRadius(30)
@@ -25,47 +27,24 @@ struct NoneSelectedPanel: View {
 
         Text("No Data Added")
             .font(.custom("noteworthy",size: 15))
-        
+
     }
 }
 
+// MARK:- INFO SELECTED PANEL
 struct WeatherInfoPanel: View {
     var body: some View {
         
         ZStack{
             
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .foregroundColor(.offWhite)
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .foregroundColor(.offWhite.opacity(0.8))
                 .border(Color.gray,width: 5)
+                .opacity(0.5)
                 .cornerRadius(30)
                 .frame(width: viewWidth - 10 ,height: viewHeight/2)
-                .padding(5)
+                
         }
-        
-        .offset(y:450)
-        
-        
-        
-        //.position(x:viewWidth/2,y:viewHeight+160)
-        
-//        Text("No Data Added")
-//            .font(.custom("noteworthy",size: 15))
-//
-//            .background(
-//
-//                RoundedRectangle(cornerRadius: 30, style: .continuous)
-//                    .stroke(lineWidth: 5)
-//                    .cornerRadius(30)
-//                    .foregroundColor(.offWhite)
-//                    .frame(width: viewWidth - 10 ,height: viewHeight/2)
-//
-//
-//
-//
-//
-//            )
-//
-
     }
 }
 
