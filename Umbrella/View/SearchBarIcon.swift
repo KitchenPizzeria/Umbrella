@@ -83,3 +83,52 @@ struct ButtonStyleView_Previews: PreviewProvider {
     }
 }
 
+struct NeumorphicView: View {
+    var bgColor: Color
+    
+    var body: some View {
+        
+        VStack {
+            
+            Button("Hello, Neumorphism!", action: {
+
+            }).padding(20)
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .shadow(color: .white, radius: 15, x: -10, y: -10)
+                            .shadow(color: .black, radius: 15, x: 10, y: 10)
+                            .blendMode(.overlay)
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            //.fill(Color.init(hex: "c9daf8"))
+                            .fill(Color.red)
+                    }
+            )
+            .foregroundColor(.primary)
+        }
+    }
+}
+
+
+extension Color {
+    
+    static let neuBackground = Color(hex: "f0f0f3")
+    static let dropShadow = Color(hex: "aeaec0").opacity(0.4)
+    static let dropLight = Color(hex: "ffffff")
+    
+}
+
+extension Color {
+    init(hex: String) {
+        let scanner = Scanner(string: hex)
+        var rgbValue: UInt64 = 0
+        scanner.scanHexInt64(&rgbValue)
+
+        let r = (rgbValue & 0xff0000) >> 16
+        let g = (rgbValue & 0xff00) >> 8
+        let b = rgbValue & 0xff
+
+        self.init(red: Double(r) / 0xff, green: Double(g) / 0xff, blue: Double(b) / 0xff)
+    }
+}
+

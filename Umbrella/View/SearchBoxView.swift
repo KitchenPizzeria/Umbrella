@@ -1,207 +1,137 @@
-//
-//  SearchBoxView.swift
-//  Umbrella
-//
-//  Created by Joseph Meyrick on 23/05/2021.
-//
-
 import SwiftUI
+import MapKit
 import CoreLocation
-
-var lat: Double = 0.00
-var lon: Double = 0.00
+import Alamofire
+import SwiftyJSON
 
 struct SearchBoxView: View {
-    
-    let controller = HomeViewController()
-    
-    @State var userInput: String = ""
-    @Binding var cityHasBeenSelected: Bool
-    @Binding var hideMapView: Bool
-    
+
+    @EnvironmentObject var mapData: MapViewModel
+    @EnvironmentObject var searchBox: SearchBoxViewModel
     
     
     var body: some View {
         
         VStack (spacing: 5) {
-        
+
             Text("Search for your city's weather")
                 .font(.custom("noteworthy",size: 15))
                 .padding(.top, 5)
             
-            HStack (alignment: .center) {
+            VStack {
                 
-                Button(action: {
+                HStack (alignment: .center) {
                     
-                    getCoordinateFrom(address: userInput) { coordinate, error in
+                    //MARK: 1st Element in H Stack
+                    
+                    Button(action: {
                         
-                      if error != nil {
-                        
-                        print("error retrieving coordinates")
-                        
-                      } else {
-                        
-                        
-                        
-                        lat = coordinate!.latitude
-                        lon = coordinate!.longitude
-                        
-                        controller.getWeatherData(lat: lat, lon: lon)
-                        
-                        
-                        withAnimation(.spring()) {
-                       
-                            cityHasBeenSelected.toggle()
-      
-                        }
-                        
-                        
-                      }
+                        mapData.getCoordsOfUserInputtedCity()
+                        mapData.userCityInput = ""
+                        // show 7 day weather panel now
+                    }){
+                        Image(systemName: mapData.citySelected ? "arrow.uturn.left" : "magnifyingglass")
+                    }
+                    .padding(.leading, 10)
+                    .buttonStyle(CircleButtonStyleView())
+                    
+                    
+                    //MARK: 2nd Element in H Stack
+                    TextField("Search...",text: $mapData.userCityInput)
+                        .padding(.leading, 5)
+                    
+                    //MARK: 3rd Element in H Stack
+                    Button(action: {
+                        withAnimation(.spring()) {mapData.hideMapView.toggle()}
+                         
+                    }) {
+                        Image(systemName: "mappin.and.ellipse").foregroundColor(.gray)
                     }
                     
-                }){
-                    
-                    if cityHasBeenSelected {
-                        Image(systemName: "arrow.uturn.left")
-                            .foregroundColor(.gray)
-                    } else {
-                    
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                    }
-                    
+                    .padding(.trailing, 10)
+                    .buttonStyle(CircleButtonStyleView())
+                
                 }
-                .padding(.leading, 10)
-                .buttonStyle(CircleButtonStyleView())
                 
+                .frame(width: 300, height: 35)
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 30, style: .continuous)
+
+                            .shadow(color: .white, radius: 15, x: -10, y: -10)
+                            .shadow(color: .black, radius: 15, x: 10, y: 10)
+                            .blendMode(.overlay)
+
+                        RoundedRectangle(cornerRadius: 30, style: .continuous)
+                            .fill(Color.init(red: 255, green: 178, blue: 255, opacity: 1))
+                    })
+                .padding([.horizontal,.bottom])
+                .foregroundColor(.primary)
                 
-                
-                TextField("Search...",text: $userInput)
-                    .padding(.leading, 5)
-                
-                
-                Button(action: {
-                    
-                    withAnimation(.spring()){
-                        
-                        hideMapView.toggle()
-                        
-                    }
-                     
-                }) {
-                    Image(systemName: "mappin.and.ellipse")
-                        .foregroundColor(.gray)
-                }
-                .padding(.trailing, 10)
-                .buttonStyle(CircleButtonStyleView())
-            
             }
             
+            .frame(height: searchBox.dropDownMenuActivated ? CGFloat(200) :CGFloat(50),alignment: .top)
             
-            .frame(width: 300, height: 35)
-            .background(
-                ZStack {
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+//            if mapData.places.isEmpty && mapData.userCityInput != "" {
+//                DropDownMenu()
+//                    .environmentObject(mapData)
+//                    .background(Color.white)
+//                }
+               
 
-                        .shadow(color: .white, radius: 15, x: -10, y: -10)
-                        .shadow(color: .black, radius: 15, x: 10, y: 10)
-                        .blendMode(.overlay)
-                    
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        
-                        .fill(
-                            Color.init(red: 255, green: 178, blue: 255, opacity: 1)
-                    )
-                        
-                        
-                        
-                }
-        
-            )
-            .padding([.horizontal,.bottom])
-            .foregroundColor(.primary)
-            
-            
-            
-            if cityHasBeenSelected {
-                Text("City Selected: \(userInput)")
+            if mapData.citySelected == true {
+                Text("City Selected: \($searchBox.userInputtedCity.wrappedValue)")
                     .font(.custom("noteworthy",size: 15))
-                Text("Latitude: \(lat, specifier: "%.2f") | Longitude: \(lon, specifier: "%.2f")")
+                Text("Latitude: \($mapData.Coordinates.latitude.wrappedValue) | Longitude: \($mapData.Coordinates.longitude.wrappedValue)")
                     .font(.custom("noteworthy",size: 15))
                     .padding(.bottom, 10)
             }
+                
             
-            
-
         }
         .background(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
                 .foregroundColor(.offWhite.opacity(0.5))
                 .border(Color.gray.opacity(0.5),width: 5)
-                .cornerRadius(30)
-              
-
-        )
-    
+                .cornerRadius(30))
     }
-    
-    func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
-        CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
-    }
-    
-
 }
 
 struct SearchBoxView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBoxView(cityHasBeenSelected: .constant(true), hideMapView: .constant(true))
-    }
-}
+        SearchBoxView()
+            .environmentObject(MapViewModel())
+            .environmentObject(SearchBoxViewModel())
 
-struct NeumorphicView: View {
-    var bgColor: Color
-    
-    var body: some View {
-        
-        VStack {
-            
-            Button("Hello, Neumorphism!", action: {
-
-            }).padding(20)
-                .background(
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .shadow(color: .white, radius: 15, x: -10, y: -10)
-                            .shadow(color: .black, radius: 15, x: 10, y: 10)
-                            .blendMode(.overlay)
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            //.fill(Color.init(hex: "c9daf8"))
-                            .fill(Color.red)
-                    }
-            )
-            .foregroundColor(.primary)
-        }
     }
 }
 
 
-extension Color {
-    static let neuBackground = Color(hex: "f0f0f3")
-    static let dropShadow = Color(hex: "aeaec0").opacity(0.4)
-    static let dropLight = Color(hex: "ffffff")
-}
+// func populateSevenDaySnapshotStack() {
+//
+//        let days  = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+//
+//        for x in 0..<7 {
+//
+//            let weatherDataIcon = WeatherIcon()
+//            let button = DropDownButton()
+//
+//            let NumID = weatherDataJSON["daily"][x]["weather"][0]["id"].double!
+//            let weather = weatherDataIcon.getWeatherIcon(condition: NumID)
+//
+//            weatherDataIcon.dayString = days[x]
+//            weatherDataIcon.imageString = weather
+//            weatherDataIcon.button = button
+//
+//            iconList.append(weatherDataIcon)
+//        }
+//
+//        print(iconList)
+//    }
+//
+//
+//
+//
+//}
+//
 
-extension Color {
-    init(hex: String) {
-        let scanner = Scanner(string: hex)
-        scanner.scanLocation = 0
-        var rgbValue: UInt64 = 0
-        scanner.scanHexInt64(&rgbValue)
-
-        let r = (rgbValue & 0xff0000) >> 16
-        let g = (rgbValue & 0xff00) >> 8
-        let b = rgbValue & 0xff
-
-        self.init(red: Double(r) / 0xff, green: Double(g) / 0xff, blue: Double(b) / 0xff)
-    }
-}
