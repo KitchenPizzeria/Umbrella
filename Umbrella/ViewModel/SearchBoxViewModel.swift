@@ -7,14 +7,11 @@
 
 import SwiftUI
 
-struct SearchBoxViewModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+class SearchBoxViewModel: NSObject, ObservableObject {
+    
+    func populateStack() {
+        
     }
+    
 }
 
-struct SearchBoxViewModel_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchBoxViewModel()
-    }
-}
