@@ -11,7 +11,7 @@ struct SnapShotView: View {
     var body: some View {
         
         GeometryReader { geometry in
-            HStack (spacing: -2) {
+            HStack (spacing: 0) {
                 ForEach(0..<7) { _ in
                     VStack {
                         Text("Mon")
@@ -22,22 +22,24 @@ struct SnapShotView: View {
                     .frame(width: geometry.size.width/7, height: 100)
                 }
             }
-            .frame(width: geometry.size.width, height: 110)
-            .cornerRadius(10)
-            .background(
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .foregroundColor(.offWhite.opacity(0.5))
-                    .border(Color.blue.opacity(0.5),width: 5)
-                    .cornerRadius(30))
+            
             
             
         }
-        
+        .frame(width: 390,height: 100, alignment: .center)
+        .cornerRadius(10)
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .foregroundColor(.offWhite.opacity(0.8))
+                .border(Color.gray,width: 5)
+                .opacity(0.5)
+                .cornerRadius(30))
     }
 }
 
 struct SnapShot_Previews: PreviewProvider {
     static var previews: some View {
         SnapShotView()
+            .padding(6.0)
     }
 }

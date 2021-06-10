@@ -13,7 +13,6 @@ struct HomeView: View {
     
     @State private var showWeatherInfoPanel = true
     @State private var cityHasBeenSelected = false
-    @State private var hideMapView = true
     
     @State private var CenterCoordinate = CLLocationCoordinate2D()
     @State private var userChosenlocation = [MKPointAnnotation]()
@@ -87,6 +86,7 @@ struct HomeView: View {
             InformationPane()
                 .environmentObject(snapshotView)
                 .environmentObject(mapData)
+                .offset(y: mapData.hideMapView ? 140 : 730)
             
             // Permission Denied Alert
             

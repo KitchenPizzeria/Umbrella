@@ -9,6 +9,9 @@ import SwiftUI
 
 class SearchBoxViewModel: NSObject, ObservableObject {
     
+    @Published var dropDownMenuActivated: Bool = false
+    @Published var userInputtedCity: String = ""
+    
     func populateStack() {
         
     }

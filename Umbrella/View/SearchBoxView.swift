@@ -42,10 +42,10 @@ struct SearchBoxView: View {
                     
                     //MARK: 3rd Element in H Stack
                     Button(action: {
-                        withAnimation(.spring()) {mapData.hideMapView.toggle()}
-                         
+                        withAnimation(.spring()){mapData.hideMapView.toggle()}
                     }) {
-                        Image(systemName: "mappin.and.ellipse").foregroundColor(.gray)
+                        Image(systemName: "mappin.and.ellipse")
+                            .foregroundColor(.gray)
                     }
                     
                     .padding(.trailing, 10)

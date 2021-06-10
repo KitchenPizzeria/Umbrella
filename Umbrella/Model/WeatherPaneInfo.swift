@@ -7,12 +7,44 @@
 
 import SwiftUI
 
+//struct Property: Identifiable {
+//    var attribute: String = ""
+//    var id = UUID()
+//}
+
+protocol PropertyLoopable {
+    func allProperties() -> [String]
+}
+
+extension PropertyLoopable {
+    func allProperties() -> [String] {
+
+        var result = [String]()
+
+        let mirror = Mirror(reflecting: self)
+
+//        // Optional check to make sure we're iterating over a struct or class
+//        guard let style = mirror.displayStyle, style == .struct || style == .class else {
+//            throw NSError()
+//        }
+
+        for (property, _) in mirror.children {
+            guard let property = property else {
+                continue
+            }
+
+            result.append(property)
+        }
+
+        return result
+    }
+}
 
 
-struct WeatherPaneInfo {
-    
-    
-    
+
+struct WeatherPaneInfo: PropertyLoopable {
+    static let instance = WeatherPaneInfo()
+
     // UNIX DATA TYPES (Clock Section)
     var dt: Int = 0
     var sunrise: Int = 0
@@ -61,17 +93,16 @@ struct WeatherPaneInfo {
     //daily.pop Probability of precipitation
     var pop: Double = 0
     
-    
     var weatherDescription: String = ""
+    
+    
+    
 
     func convertUnixToTime(unixTime: Int){
         
         print(NSDate(timeIntervalSince1970: TimeInterval(unixTime)))
         
     }
-    
-    
-    
-    
+   
 }
 

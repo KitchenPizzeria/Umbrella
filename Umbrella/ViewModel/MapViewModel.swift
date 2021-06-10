@@ -102,7 +102,7 @@ class MapViewModel : NSObject, ObservableObject, CLLocationManagerDelegate {
             self.Coordinates.latitude = coordinate?.latitude ?? 0
             self.Coordinates.longitude = coordinate?.longitude ?? 0
             
-            self.snapshotController.getWeatherdata(lat: self.Coordinates.latitude,
+            self.snapshotController.getWeatherData(lat: self.Coordinates.latitude,
                                                    lon: self.Coordinates.longitude,
                                                    city: self.userCityInput)
 
