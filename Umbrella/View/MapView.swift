@@ -49,6 +49,7 @@ struct MapView: UIViewRepresentable {
                 return pinAnnotation
             }
         }
+        
 //        var parent: MapView
 //
 //        init(_ parent: MapView) {
@@ -58,6 +59,7 @@ struct MapView: UIViewRepresentable {
 //        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
 //            parent.CenterCoord = mapView.centerCoordinate
 //        }
+        
     }
 }
 
