@@ -9,4 +9,6 @@
 # Umbrella
 ## Description
 
-Never forget your umbrella with this weather app !
+Never forget your Umbrella with this weather app! locate yourself and find weather for your local area or for somewhere you may be visiting. Featuring neumorphic design and UI gestures for ease of use an modern app development.
+
+
