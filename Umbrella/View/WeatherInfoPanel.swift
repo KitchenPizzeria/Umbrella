@@ -94,7 +94,7 @@ struct WeatherInfoPanel: View {
         
         .background(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .foregroundColor(.offWhite.opacity(0.8))
+            //.foregroundColor(.offWhite.opacity(0.8))
                 .border(Color.gray,width: 5)
                 .opacity(0.5)
                 .cornerRadius(30)

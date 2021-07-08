@@ -4,6 +4,26 @@ import CoreLocation
 import Alamofire
 import SwiftyJSON
 
+struct CircleButtonStyleView: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .frame(width: 30, height: 30)
+        .background(
+            Group {
+                if configuration.isPressed {
+                    Circle()
+                        .fill(Color.offWhite)
+                } else {
+                    Circle()
+                        .fill(Color.offWhite)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+                        .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+                }
+            }
+        )
+    }
+}
+
 struct SearchBoxView: View {
 
     @EnvironmentObject var mapData: MapViewModel

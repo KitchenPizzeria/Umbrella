@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7CA024772656B31200B27D05"
-               BuildableName = "Umbrella.app"
-               BlueprintName = "Umbrella"
-               ReferencedContainer = "container:Umbrella.xcodeproj">
+               BlueprintIdentifier = "64569F8A1257C847BF846484919EBE5F"
+               BuildableName = "Pods_Umbrella.framework"
+               BlueprintName = "Pods-Umbrella"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,16 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7CA024772656B31200B27D05"
-            BuildableName = "Umbrella.app"
-            BlueprintName = "Umbrella"
-            ReferencedContainer = "container:Umbrella.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -57,16 +47,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7CA024772656B31200B27D05"
-            BuildableName = "Umbrella.app"
-            BlueprintName = "Umbrella"
-            ReferencedContainer = "container:Umbrella.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

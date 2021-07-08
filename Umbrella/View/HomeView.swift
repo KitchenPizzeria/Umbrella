@@ -9,6 +9,10 @@ import SwiftUI
 import MapKit
 import CoreLocation
 
+extension Color {
+    static let offWhite = Color(red: 225 / 255, green: 225 / 255, blue: 235 / 255)
+}
+
 struct HomeView: View {
     
     @State private var showWeatherInfoPanel = true
