@@ -2,7 +2,13 @@
 
 1. Copy and paste this line into Terminal
 
-**git clone https://github.com/KitchenPizzeria/Umbrella; cd Umbrella; open Umbrella.xcworkspace -a Xcode**
+```
+
+git clone https://github.com/KitchenPizzeria/Umbrella
+cd Umbrella
+open Umbrella.xcworkspace -a Xcode**
+
+```
 
 2. In Xcode, run project 
 
